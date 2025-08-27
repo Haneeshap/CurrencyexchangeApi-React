@@ -1,44 +1,24 @@
 import React, { useState } from 'react';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Simple validation
     if (!username || !password) {
       alert('Please enter both username and password');
       return;
     }
 
-    setLoading(true);
+    // Simulate login logic
+    console.log('Logging in with:', { username, password });
 
-    try {
-      // Replace this URL with your actual login endpoint
-      const response = await fetch('https://example.com/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert(`Login successful! Welcome, ${data.username}`);
-        // You can store token or redirect here
-      } else {
-        alert(`Login failed: ${data.message}`);
-      }
-    } catch (error) {
-      alert('Something went wrong. Please try again.');
-      console.error('Login error:', error);
-    } finally {
-      setLoading(false);
-    }
+    // You can replace this with actual API call later
+    //alert(`Welcome, ${username}!`);
+    onLoginSuccess();
   };
 
   return (
@@ -59,14 +39,13 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           style={styles.input}
         />
-        <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
+        <button type="submit" style={styles.button}>Login</button>
       </form>
     </div>
   );
 };
 
+// Simple inline styles
 const styles = {
   container: {
     maxWidth: '300px',
@@ -94,5 +73,4 @@ const styles = {
     borderRadius: '4px'
   }
 };
-
 export default Login;

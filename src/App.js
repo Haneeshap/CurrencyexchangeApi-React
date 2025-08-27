@@ -7,7 +7,7 @@ import CurrencyRates from './CurrencyRates';
 function App() {
    return (
     <div className="App">
-      <h1>Currency Converter Hani Nandan is my love</h1>
+      <h1>Currency Converter </h1>
       <CurrencyRates />
     </div>
   );

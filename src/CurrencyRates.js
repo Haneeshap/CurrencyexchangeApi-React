@@ -1,39 +1,90 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const CurrencyRates = () => {
-  const [rates, setRates] = useState({});
-  const [loading, setLoading] = useState(true);
+const CurrencyConverter = () => {
+  // Your state variables go here
+  const [amount, setAmount] = useState('');
+  const [fromCurrency, setFromCurrency] = useState('USD');
+  const [toCurrency, setToCurrency] = useState('INR');
+  const [convertedAmount, setConvertedAmount] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
+  // Fetch exchange rates
   useEffect(() => {
-    fetch('https://v6.exchangerate-api.com/v6/7e0819a9bf46958eb8b50810/latest/USD')
-      .then(response => response.json())
-      .then(data => {
-        setRates(data.conversion_rates); // Extract sub-JSON
-        setLoading(false);
+    if (!amount || isNaN(amount)) return;
+
+    setLoading(true);
+    setError('');
+
+    axios.get(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`)
+      .then(response => {
+        const rate = response.data.rates[toCurrency];
+        setConvertedAmount((amount * rate).toFixed(2));
+        setLastUpdated(new Date(response.data.time_last_updated * 1000).toLocaleString());
       })
-      .catch(error => {
-        console.error('Error fetching exchange rates:', error);
+      .catch(() => {
+        setError('Failed to fetch exchange rates. Please try again.');
+      })
+      .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [amount, fromCurrency, toCurrency]);
 
-  if (loading) return <p>Loading exchange rates...</p>;
+  // Flip currencies
+  const handleFlip = () => {
+    setFromCurrency(toCurrency);
+    setToCurrency(fromCurrency);
+  };
+
+  // Currency flags
+  const currencyFlags = {
+    USD: '🇺🇸',
+    INR: '🇮🇳',
+    EUR: '🇪🇺',
+    GBP: '🇬🇧',
+    JPY: '🇯🇵',
+  };
 
   return (
     <div>
-      <h2>Exchange Rates (Base: USD)</h2>
-      <ul>
-        {Object.entries(rates)
-        .filter(([currency]) => currency === 'INR' || currency === 'EUR' || currency === 'SGD' || currency === 'JPY')
-        .map(([currency, rate]) => (
-          <li key={currency}>
-            {currency}: {rate}
-          </li>
+      <h2>Currency Converter</h2>
+
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        placeholder="Enter amount"
+      />
+
+      <select value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)}>
+        {Object.keys(currencyFlags).map(code => (
+          <option key={code} value={code}>
+            {currencyFlags[code]} {code}
+          </option>
         ))}
-      </ul>
+      </select>
+
+      <button onClick={handleFlip}>🔄 Flip</button>
+
+      <select value={toCurrency} onChange={(e) => setToCurrency(e.target.value)}>
+        {Object.keys(currencyFlags).map(code => (
+          <option key={code} value={code}>
+            {currencyFlags[code]} {code}
+          </option>
+        ))}
+      </select>
+
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {convertedAmount && (
+        <p>{amount} {fromCurrency} = {convertedAmount} {toCurrency}</p>
+      )}
+      {lastUpdated && <p>Last updated: {lastUpdated}</p>}
     </div>
   );
 };
 
-export default CurrencyRates;
+export default CurrencyConverter;

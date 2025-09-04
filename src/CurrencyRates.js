@@ -46,17 +46,18 @@ const CurrencyConverter = () => {
     EUR: '🇪🇺',
     GBP: '🇬🇧',
     JPY: '🇯🇵',
-  };
+    HKD: 'hk',
+    CAD:'ca'  };
 
   return (
     <div>
-      <h2>Currency Converter</h2>
+      <h2>Currency Converter Website</h2>
 
       <input
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Enter amount"
+        placeholder="Enter the amount"
       />
 
       <select value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)}>

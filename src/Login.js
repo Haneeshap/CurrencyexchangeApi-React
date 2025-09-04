@@ -51,7 +51,7 @@ const styles = {
     maxWidth: '300px',
     margin: '50px auto',
     padding: '20px',
-    border: '1px solid #ccc',
+    border: '1px solid #0c3ba8ff',
     borderRadius: '8px',
     textAlign: 'center'
   },
@@ -67,8 +67,8 @@ const styles = {
   button: {
     padding: '10px',
     fontSize: '16px',
-    backgroundColor: '#007bff',
-    color: '#fff',
+    backgroundColor: '#c32206ff',
+    color: '#4f0256ff',
     border: 'none',
     borderRadius: '4px'
   }

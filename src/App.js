@@ -2,6 +2,7 @@
 import './App.css';
  import React, { useState } from 'react';
 import CurrencyRates from './CurrencyRates';
+import Books from './Books';
 import Login from './Login';
 
 function App() {
@@ -11,7 +12,8 @@ function App() {
 
     <div>
      {isLoggedIn ? (
-        <CurrencyRates />
+        //<CurrencyRates />
+        <Books />
       ) : (
         <Login onLoginSuccess={() => setIsLoggedIn(true)} />
       )}

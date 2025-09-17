@@ -19,11 +19,26 @@ function Books() {
       {books.length === 0 ? (
         <p>No books available.</p>
       ) : (
-        books.map(book => (
-          <div key={book.id}>
-            <strong>{book.title}</strong> by {book.author}
-          </div>
-        ))
+       <table border="1" cellPadding="8" cellSpacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Year</th> {/* Optional: if you have a year field */}
+            </tr>
+          </thead>
+          <tbody>
+            {books.map((book) => (
+              <tr key={book.id}>
+                <td>{book.id}</td>
+                <td>{book.title}</td>
+                <td>{book.author}</td>
+                <td>{book.year || "-"}</td> {/* Use book.publishedYear if you renamed it */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
